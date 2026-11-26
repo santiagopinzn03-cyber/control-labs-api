@@ -8,14 +8,14 @@ const isCreateLoanDTO = (value: unknown): value is ICreateLoanDTO => {
 
   const loan = value as Record<string, unknown>;
   return (
-    typeof loan.aula === 'string' &&
-    loan.aula.trim() !== '' &&
-    typeof loan.numeroPC === 'number' &&
-    Number.isInteger(loan.numeroPC) &&
-    typeof loan.nombreGuardaEntrega === 'string' &&
-    loan.nombreGuardaEntrega.trim() !== '' &&
-    typeof loan.instructorRecibe === 'string' &&
-    loan.instructorRecibe.trim() !== ''
+    typeof loan.roomId === 'string' &&
+    loan.roomId.trim() !== '' &&
+    typeof loan.instructorId === 'string' &&
+    loan.instructorId.trim() !== '' &&
+    typeof loan.guardaId === 'string' &&
+    loan.guardaId.trim() !== '' &&
+    typeof loan.numeroPc === 'number' &&
+    Number.isInteger(loan.numeroPc)
   );
 };
 

@@ -1,38 +1,65 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
+import { ICreateLoanDTO } from '../dtos/loan.dto';
+import { InMemoryLoanRepository } from '../repositories/in-memory-loan.repository';
+import { LoanService } from '../services/loan.service';
+
+const loanService = new LoanService(new InMemoryLoanRepository());
 
 export class LoanController {
-  public static createLoan = (req: Request, res: Response): void => {
-    // TODO: llamar al servicio con req.body y responder 201 con el préstamo creado.
-    res.status(501).json({
-      success: false,
-      message: 'El registro de préstamos todavía no está implementado.'
-    });
+  public static createLoan = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const input = req.body as ICreateLoanDTO;
+      const loan = await loanService.createLoan(input);
+      res.status(201).json({ success: true, data: loan });
+    } catch (error) {
+      next(error);
+    }
   };
 
-  public static getLoansByFilter = (req: Request, res: Response): void => {
-    // TODO: tomar los filtros de req.query, llamar al servicio y responder con los resultados.
-    res.status(501).json({
-      success: false,
-      message: 'La consulta del historial todavía no está implementada.'
-    });
+  public static getLoansByFilter = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const roomId =
+        typeof req.query.roomId === 'string' ? req.query.roomId : undefined;
+      const loans = await loanService.getLoans({ roomId });
+      res.status(200).json({ success: true, data: loans });
+    } catch (error) {
+      next(error);
+    }
   };
 
-  public static getLoanById = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    // TODO: pasar id a la operación de consulta y responder con el préstamo encontrado.
-    res.status(501).json({
-      success: false,
-      message: `La consulta del préstamo ${id} todavía no está implementada.`
-    });
+  public static getLoanById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const id = Number(req.params.id);
+      const loan = await loanService.getLoanById(id);
+      res.status(200).json({ success: true, data: loan });
+    } catch (error) {
+      next(error);
+    }
   };
 
-  public static acceptLoanInventory = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    // TODO: pasar id a la operación de aceptación y responder con el resultado.
-    res.status(501).json({
-      success: false,
-      message: `La aceptación del préstamo ${id} todavía no está implementada.`
-    });
+  public static acceptLoanInventory = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const id = Number(req.params.id);
+      const loan = await loanService.acceptLoan(id);
+      res.status(200).json({ success: true, data: loan });
+    } catch (error) {
+      next(error);
+    }
   };
 }
-                
