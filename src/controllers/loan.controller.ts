@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { ICreateLoanDTO } from '../dtos/loan.dto';
-import { InMemoryLoanRepository } from '../repositories/in-memory-loan.repository';
+import { prisma } from '../db/prisma';
+import { PrismaLoanRepository } from '../repositories/prisma-loan.repository';
 import { LoanService } from '../services/loan.service';
 
-const loanService = new LoanService(new InMemoryLoanRepository());
+const loanService = new LoanService(new PrismaLoanRepository(prisma));
 
 export class LoanController {
   public static createLoan = async (
